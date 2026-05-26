@@ -1,0 +1,2056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Your Automation Mastery Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent1: #00e5ff;
+    --accent2: #ff4d6d;
+    --accent3: #b8ff3c;
+    --accent4: #ffaa00;
+    --accent5: #a78bfa;
+    --text: #e8e8f0;
+    --muted: #6b6b80;
+    --card: #13131c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Ambient background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -40%;
+    left: -20%;
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(ellipse, rgba(0,229,255,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  body::after {
+    content: '';
+    position: fixed;
+    bottom: -30%;
+    right: -10%;
+    width: 60%;
+    height: 60%;
+    background: radial-gradient(ellipse, rgba(255,77,109,0.04) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    padding: 60px 0 40px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 48px;
+  }
+
+  .header-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: var(--accent1);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .header-label::before {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--accent1);
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(52px, 9vw, 96px);
+    line-height: 0.9;
+    letter-spacing: 0.01em;
+    margin-bottom: 20px;
+  }
+
+  h1 span.highlight {
+    color: var(--accent1);
+  }
+  h1 span.dim {
+    color: var(--muted);
+  }
+
+  .header-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 5px 12px;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+  }
+  .badge-cyan { background: rgba(0,229,255,0.1); color: var(--accent1); border: 1px solid rgba(0,229,255,0.2); }
+  .badge-red { background: rgba(255,77,109,0.1); color: var(--accent2); border: 1px solid rgba(255,77,109,0.2); }
+  .badge-green { background: rgba(184,255,60,0.1); color: var(--accent3); border: 1px solid rgba(184,255,60,0.2); }
+  .badge-yellow { background: rgba(255,170,0,0.1); color: var(--accent4); border: 1px solid rgba(255,170,0,0.2); }
+  .badge-purple { background: rgba(167,139,250,0.1); color: var(--accent5); border: 1px solid rgba(167,139,250,0.2); }
+
+  /* OVERVIEW STATS */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-bottom: 56px;
+  }
+
+  .stat {
+    background: var(--card);
+    padding: 24px 20px;
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 42px;
+    line-height: 1;
+    margin-bottom: 6px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  /* SECTION HEADERS */
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    letter-spacing: 0.04em;
+  }
+
+  .section-duration {
+    margin-left: auto;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  /* PHASE BLOCKS */
+  .phase {
+    margin-bottom: 56px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.5s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .phase:nth-child(1) { animation-delay: 0.1s; }
+  .phase:nth-child(2) { animation-delay: 0.2s; }
+  .phase:nth-child(3) { animation-delay: 0.3s; }
+  .phase:nth-child(4) { animation-delay: 0.4s; }
+  .phase:nth-child(5) { animation-delay: 0.5s; }
+  .phase:nth-child(6) { animation-delay: 0.6s; }
+
+  .phase-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+  }
+
+  .phase-label .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  /* WEEK CARDS */
+  .weeks-grid {
+    display: grid;
+    gap: 8px;
+  }
+
+  .week-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid;
+    padding: 20px 24px;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+  }
+
+  .week-card:hover {
+    background: #16161f;
+  }
+
+  .week-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .week-title {
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 600;
+    font-size: 15px;
+  }
+
+  .week-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  .week-tasks {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .week-tasks li {
+    font-size: 13.5px;
+    color: #a0a0b8;
+    line-height: 1.5;
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .week-tasks li::before {
+    content: '→';
+    font-size: 11px;
+    flex-shrink: 0;
+    opacity: 0.5;
+  }
+
+  .week-resources {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .resource-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  a.resource-pill:hover {
+    color: var(--accent1);
+    border-color: rgba(0,229,255,0.3);
+  }
+
+  .alt-resources {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.07);
+  }
+  .alt-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .alt-label::before { content: ''; display:block; width:16px; height:1px; background:var(--muted); opacity:0.4; }
+  .alt-pills { display:flex; flex-wrap:wrap; gap:5px; }
+  a.udemy-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid rgba(163,113,247,0.3);
+    color: #a371f7;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    background: rgba(163,113,247,0.06);
+  }
+  a.udemy-pill:hover { border-color: rgba(163,113,247,0.6); color: #c4a3ff; }
+  a.oreilly-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 2px;
+    border: 1px solid rgba(231,76,60,0.3);
+    color: #e74c3c;
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: all 0.2s;
+    background: rgba(231,76,60,0.06);
+  }
+  a.oreilly-pill:hover { border-color: rgba(231,76,60,0.6); color: #ff7066; }
+
+  /* PROJECT CARDS */
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 24px;
+    margin-bottom: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .project-name {
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 6px;
+  }
+
+  .project-desc {
+    font-size: 13px;
+    color: #8888a0;
+    line-height: 1.6;
+  }
+
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 12px;
+  }
+
+  /* TIPS */
+  .tip-box {
+    background: rgba(0,229,255,0.04);
+    border: 1px solid rgba(0,229,255,0.12);
+    border-left: 3px solid var(--accent1);
+    padding: 18px 20px;
+    margin-top: 32px;
+    margin-bottom: 48px;
+  }
+
+  .tip-box h3 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    margin-bottom: 10px;
+  }
+
+  .tip-box p {
+    font-size: 13px;
+    color: #8888a0;
+    line-height: 1.7;
+  }
+
+  .tip-box ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 8px;
+  }
+
+  .tip-box ul li {
+    font-size: 13px;
+    color: #8888a0;
+    display: flex;
+    gap: 10px;
+  }
+  .tip-box ul li::before { content: '✦'; color: var(--accent1); font-size: 9px; margin-top: 4px; flex-shrink: 0; }
+
+  /* TIMELINE BAR */
+  .timeline-bar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 28px;
+    margin-bottom: 56px;
+  }
+
+  .timeline-bar h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    margin-bottom: 20px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+
+  .timeline-track {
+    position: relative;
+    height: 40px;
+    display: flex;
+    gap: 3px;
+    margin-bottom: 10px;
+  }
+
+  .timeline-segment {
+    height: 100%;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.05em;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: var(--bg);
+    transition: transform 0.2s;
+    cursor: default;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 0 6px;
+  }
+
+  .timeline-segment:hover { transform: scaleY(1.1); }
+
+  .timeline-labels {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* DIVIDER */
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 48px 0;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding-top: 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: gap;
+    gap: 12px;
+  }
+
+  footer p {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 0.05em;
+  }
+
+  .footer-accent {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    color: var(--border);
+    letter-spacing: 0.1em;
+  }
+
+  /* Checkbox interaction */
+  .week-card.done {
+    opacity: 0.45;
+    border-left-color: var(--muted) !important;
+  }
+
+  .check-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    cursor: pointer;
+    border-radius: 2px;
+    letter-spacing: 0.05em;
+    transition: all 0.2s;
+  }
+  .check-btn:hover { border-color: var(--accent3); color: var(--accent3); }
+  .week-card.done .check-btn { background: rgba(184,255,60,0.08); border-color: rgba(184,255,60,0.3); color: var(--accent3); }
+
+  .progress-bar-wrap {
+    height: 3px;
+    background: var(--border);
+    margin-bottom: 48px;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent1), var(--accent3));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+    width: 0%;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    margin-bottom: 8px;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="header-label">Personalised Learning Plan · 2026</div>
+    <h1>AUTOMATION<br><span class="highlight">MASTERY</span><br><span class="dim">ROADMAP</span></h1>
+    <div class="header-meta">
+      <span class="badge badge-cyan">Already Employed</span>
+      <span class="badge badge-red">30–60 min/day</span>
+      <span class="badge badge-green">4 Month Target</span>
+      <span class="badge badge-yellow">Beginner → Job-Ready</span>
+      <span class="badge badge-purple">Mix of Learning Styles</span>
+    </div>
+  </header>
+
+  <div class="stats-grid">
+    <div class="stat">
+      <div class="stat-num" style="color:var(--accent1)">16</div>
+      <div class="stat-label">Weeks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--accent2)">10</div>
+      <div class="stat-label">Core Skills</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--accent3)">8</div>
+      <div class="stat-label">Projects Built</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--accent4)">~200</div>
+      <div class="stat-label">Total Hours</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num" style="color:var(--accent5)">2</div>
+      <div class="stat-label">Career Paths</div>
+    </div>
+  </div>
+
+  <!-- TIMELINE -->
+  <div class="timeline-bar">
+    <h3>16-WEEK OVERVIEW</h3>
+    <div class="timeline-track">
+      <div class="timeline-segment" style="width:19%;background:var(--accent1)">Python</div>
+      <div class="timeline-segment" style="width:18%;background:var(--accent2)">Selenium/API</div>
+      <div class="timeline-segment" style="width:14%;background:var(--accent3);color:#0a0a0f">SQL+Git</div>
+      <div class="timeline-segment" style="width:13%;background:var(--accent4);color:#0a0a0f">Frameworks</div>
+      <div class="timeline-segment" style="width:12%;background:var(--accent5)">CI/Docker</div>
+      <div class="timeline-segment" style="width:12%;background:#ff6b9d">Excel+BI</div>
+      <div class="timeline-segment" style="width:12%;background:#00d4aa;color:#0a0a0f">AI+Portfolio</div>
+    </div>
+    <div class="timeline-labels">
+      <span>Week 1</span>
+      <span>Week 4</span>
+      <span>Week 7</span>
+      <span>Week 10</span>
+      <span>Week 13</span>
+      <span>Week 16</span>
+    </div>
+  </div>
+
+  <!-- PROGRESS -->
+  <div class="progress-label" id="progress-label">Progress: 0 of 16 weeks complete</div>
+  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar"></div></div>
+
+  <!-- PHASE 1 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(0,229,255,0.08);color:var(--accent1);border:1px solid rgba(0,229,255,0.2)">
+      <span class="dot" style="background:var(--accent1)"></span>
+      Phase 1 · Weeks 1–3 · Foundation
+    </div>
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">PYTHON FUNDAMENTALS</span>
+      <span class="section-duration">3 weeks · ~45 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:var(--accent1)" data-week="1">
+        <div class="week-header">
+          <span class="week-title">Week 1 — Python Basics</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Core Language</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Variables, data types, strings, numbers, booleans</li>
+          <li>If/else logic, loops (for, while), basic functions</li>
+          <li>Lists, dictionaries, tuples — Python's bread and butter</li>
+          <li>Daily 10-min practice: solve 1 easy problem on Exercism.io</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://docs.python.org/3/tutorial/" target="_blank">Python.org Tutorial (free) ↗</a>
+          <a class="resource-pill" href="https://www.edx.org/learn/python/harvard-university-cs50-s-introduction-to-programming-with-python" target="_blank">CS50P on edX (free) ↗</a>
+          <a class="resource-pill" href="https://exercism.org/tracks/python" target="_blank">Exercism.io ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/100-days-of-code/" target="_blank">Udemy: 100 Days of Code – Angela Yu ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/complete-python-bootcamp/" target="_blank">Udemy: Complete Python Bootcamp – Jose Portilla ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/learning-python-5th/9781449355722/" target="_blank">O'Reilly: Learning Python 5th Ed – Mark Lutz ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/the-complete-python/9781837636778/" target="_blank">O'Reilly: The Complete Python Course (Video) ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent1)" data-week="2">
+        <div class="week-header">
+          <span class="week-title">Week 2 — Functions, Files & Error Handling</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Practical Python</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Writing reusable functions with parameters & return values</li>
+          <li>Reading/writing CSV and text files (os, csv, json modules)</li>
+          <li>Try/except error handling — essential for automation scripts</li>
+          <li>Mini project: script that reads a CSV and outputs a summary</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://automatetheboringstuff.com/" target="_blank">Automate the Boring Stuff (free) ↗</a>
+          <a class="resource-pill" href="https://realpython.com/" target="_blank">Real Python ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/100-days-of-code/" target="_blank">Udemy: 100 Days of Code – Angela Yu (Days 1-30) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/the-complete-python-course/" target="_blank">Udemy: Python Automation – Real-World Projects ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/automate-the-boring/9781098122584/" target="_blank">O'Reilly: Automate the Boring Stuff with Python (O'Reilly) ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-for-devops/9781492057680/" target="_blank">O'Reilly: Python for DevOps – Book ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent1)" data-week="3">
+        <div class="week-header">
+          <span class="week-title">Week 3 — OOP & Modules</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Object Oriented</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Classes, objects, inheritance — how real test frameworks are structured</li>
+          <li>pip, virtual environments, requirements.txt</li>
+          <li>Using AI (Claude/ChatGPT) to explain code snippets you don't understand</li>
+          <li>Mini project: build a simple class-based "to-do list" CLI app</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://www.youtube.com/playlist?list=PL-osiE80TeTsqhIuOqKhwlXsIBIdSeYtc" target="_blank">Corey Schafer OOP YouTube ↗</a>
+          <a class="resource-pill" href="https://claude.ai" target="_blank">Claude.ai ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/playwright-automation-with-python-pytest-ai-jenkins/" target="_blank">Udemy: Playwright Automation with Python, Pytest, AI & Jenkins (Updated 4/2026) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/chatgpt-for-software-testing/" target="_blank">Udemy: ChatGPT for Test Automation Engineers ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/powerful-python/9781098175696/" target="_blank">O'Reilly: Powerful Python – Aaron Maxwell (AI/testing) ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/automated-software-testing/9781839214592/" target="_blank">O'Reilly: Automated Software Testing with Python ↗</a>
+            </div>
+          </div>
+          </div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/complete-python-bootcamp/" target="_blank">Udemy: Complete Python Bootcamp – OOP Section ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/python-beyond-the-basics-object-oriented-programming/" target="_blank">Udemy: Python OOP: 4 Pillars of OOP ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/fluent-python-2nd/9781492056348/" target="_blank">O'Reilly: Fluent Python 2nd Ed – Luciano Ramalho ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/online-learning/individuals/start-learning-python.html" target="_blank">O'Reilly: Python Fundamentals (Live Course) ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(255,77,109,0.08);color:var(--accent2);border:1px solid rgba(255,77,109,0.2)">
+      <span class="dot" style="background:var(--accent2)"></span>
+      Phase 2 · Weeks 4–7 · Automation Core
+    </div>
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">SELENIUM + PLAYWRIGHT + API TESTING</span>
+      <span class="section-duration">4 weeks · ~45 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:var(--accent2)" data-week="4">
+        <div class="week-header">
+          <span class="week-title">Week 4 — Selenium Fundamentals</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Web Automation</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Setting up Selenium with Python + ChromeDriver</li>
+          <li>Locating elements: ID, CSS selectors, XPath</li>
+          <li>Clicking, typing, waiting, form submission</li>
+          <li>Project: automate a login form on a demo site (the-internet.herokuapp.com)</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://selenium-python.readthedocs.io/" target="_blank">Selenium Python Docs ↗</a>
+          <a class="resource-pill" href="https://testautomationu.applitools.com/" target="_blank">TestAutomationU (free) ↗</a>
+          <a class="resource-pill" href="https://the-internet.herokuapp.com/" target="_blank">the-internet.herokuapp.com ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/selenium-webdriver-with-python3/" target="_blank">Udemy: Selenium WebDriver with Python & PyTest – 4.7★ ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/playwright-automation-with-python-pytest-ai-jenkins/" target="_blank">Udemy: Playwright Automation with Python, Pytest & Jenkins ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/videos/selenium-python-automation/9781800567733/" target="_blank">O'Reilly: Selenium Python Automation – 18hr Video ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/automated-software-testing/9781839214592/" target="_blank">O'Reilly: Automated Software Testing with Python ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent2)" data-week="5">
+        <div class="week-header">
+          <span class="week-title">Week 5 — Playwright (Modern Standard)</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Modern Tooling</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Why Playwright is replacing Selenium at many companies</li>
+          <li>Setting up Playwright Python, running headless tests</li>
+          <li>Page Object Model pattern — critical for interviews</li>
+          <li>Use Claude to generate a Playwright test script, then understand every line</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://playwright.dev/python/docs/intro" target="_blank">Playwright Python Docs ↗</a>
+          <a class="resource-pill" href="https://playwright.dev/python/docs/inspector" target="_blank">Playwright Inspector ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/playwright-python-automation-testing-pytest/" target="_blank">Udemy: Playwright PYTHON – From Zero to Expert (Rahul Shetty) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/learn-playwright-with-python-web-api-automation/" target="_blank">Udemy: Learn Playwright with Python – Web & API (Updated 4/2026) ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/videos/modern-web-test/9781806705870/" target="_blank">O'Reilly: Modern Web Test Automation with Playwright & Python ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/playwright-python-and/9781835465011/" target="_blank">O'Reilly: Playwright Python & Pytest – 10hr Video ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent2)" data-week="6">
+        <div class="week-header">
+          <span class="week-title">Week 6 — API Testing with Requests + Postman</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">API Testing</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>HTTP basics: GET, POST, PUT, DELETE, status codes</li>
+          <li>Postman: send requests, inspect responses, write test scripts</li>
+          <li>Python requests library: automate API calls in scripts</li>
+          <li>Project: test a public API (JSONPlaceholder or ReqRes.in) with assertions</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://learning.postman.com/" target="_blank">Postman Learning Center (free) ↗</a>
+          <a class="resource-pill" href="https://reqres.in/" target="_blank">ReqRes Practice API ↗</a>
+          <a class="resource-pill" href="https://requests.readthedocs.io/en/latest/" target="_blank">Requests Docs ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/postman-the-complete-guide/" target="_blank">Udemy: Postman: The Complete Guide – REST API Testing ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/learn-playwright-with-python-web-api-automation/" target="_blank">Udemy: API Testing with Python + Pytest (Playwright & Requests) ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/automated-software-testing/9781839214592/" target="_blank">O'Reilly: Automated Software Testing with Python (API section) ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-for-programmers/9780135231364/" target="_blank">O'Reilly: Python for Programmers – API chapters ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent2)" data-week="7">
+        <div class="week-header">
+          <span class="week-title">Week 7 — Pytest Framework</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Test Framework</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Writing test cases with pytest — fixtures, markers, parametrize</li>
+          <li>Combining Playwright + Pytest for structured test suites</li>
+          <li>HTML test reports with pytest-html</li>
+          <li>Project: full end-to-end test suite for a demo e-commerce site</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://docs.pytest.org/en/stable/" target="_blank">Pytest Docs ↗</a>
+          <a class="resource-pill" href="https://www.udemy.com/course/selenium-webdriver-with-python3/" target="_blank">Udemy Selenium+Pytest (~£12) ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/selenium-webdriver-with-python3/" target="_blank">Udemy: Selenium Pytest – Rahul Shetty (Full Framework) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/cicd-testers/" target="_blank">Udemy: CI/CD for Test Automation: Jenkins & GitHub Actions ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/playwright-python-and/9781835465011/" target="_blank">O'Reilly: Playwright Python & Pytest – 10hr Video (Pytest deep dive) ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-testing-with/9781680509427/" target="_blank">O'Reilly: Python Testing with pytest – Brian Okken ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(184,255,60,0.08);color:var(--accent3);border:1px solid rgba(184,255,60,0.2)">
+      <span class="dot" style="background:var(--accent3)"></span>
+      Phase 3 · Weeks 8–9 · Data + Version Control
+    </div>
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">SQL BASICS + GIT</span>
+      <span class="section-duration">2 weeks · ~45 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:var(--accent3)" data-week="8">
+        <div class="week-header">
+          <span class="week-title">Week 8 — SQL Basics</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Databases</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>SELECT, WHERE, ORDER BY, GROUP BY, JOIN fundamentals</li>
+          <li>Writing queries against real data in SQLiteOnline.com</li>
+          <li>How automation engineers use SQL to validate backend data</li>
+          <li>Practice: solve 20 problems on SQLZoo or Mode Analytics</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://sqlzoo.net/" target="_blank">SQLZoo (free) ↗</a>
+          <a class="resource-pill" href="https://sqliteonline.com/" target="_blank">SQLiteOnline.com ↗</a>
+          <a class="resource-pill" href="https://www.w3schools.com/sql/" target="_blank">W3Schools SQL ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/15-days-of-sql/" target="_blank">Udemy: 15 Days of SQL: The Complete SQL Masterclass 2026 ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/sqlcourse/" target="_blank">Udemy: Complete SQL & MySQL – Beginner to Advanced 2026 ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/learning-sql-3rd/9781492057604/" target="_blank">O'Reilly: Learning SQL 3rd Ed – Alan Beaulieu ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/sql-cookbook-2nd/9781492077435/" target="_blank">O'Reilly: SQL Cookbook 2nd Ed – Anthony Molinaro ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent3)" data-week="9">
+        <div class="week-header">
+          <span class="week-title">Week 9 — Git + GitHub</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Version Control</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Git init, add, commit, push, pull, branch, merge</li>
+          <li>GitHub: repos, pull requests, README files</li>
+          <li>Upload ALL your previous projects to GitHub — this is your portfolio</li>
+          <li>Branching strategy used in real teams (feature branches, main/dev)</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://ohmygit.org/" target="_blank">Oh My Git! (free game) ↗</a>
+          <a class="resource-pill" href="https://skills.github.com/" target="_blank">GitHub Skills (free) ↗</a>
+          <a class="resource-pill" href="https://www.atlassian.com/git/tutorials" target="_blank">Atlassian Git Tutorial ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/git-and-github-bootcamp/" target="_blank">Udemy: Git & GitHub Bootcamp – Colt Steele ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/git-the-complete-guide-to-git-and-github/" target="_blank">Udemy: The Git & GitHub Masterclass ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/git-pocket-guide/9781449327507/" target="_blank">O'Reilly: Git Pocket Guide – Richard Silverman ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/learning-git/9781098133900/" target="_blank">O'Reilly: Learning Git – Anna Skoulikari ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(255,170,0,0.08);color:var(--accent4);border:1px solid rgba(255,170,0,0.2)">
+      <span class="dot" style="background:var(--accent4)"></span>
+      Phase 4 · Weeks 10–11 · DevOps Essentials
+    </div>
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">JENKINS + DOCKER BASICS</span>
+      <span class="section-duration">2 weeks · ~45 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:var(--accent4)" data-week="10">
+        <div class="week-header">
+          <span class="week-title">Week 10 — Jenkins CI/CD</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">CI/CD</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>What CI/CD is and why it matters in automation engineering</li>
+          <li>Setting up Jenkins locally, creating a basic pipeline</li>
+          <li>Triggering your Pytest suite automatically on code push</li>
+          <li>Reading Jenkins build logs and diagnosing failures</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://www.jenkins.io/doc/" target="_blank">Jenkins Docs (free) ↗</a>
+          <a class="resource-pill" href="https://docs.github.com/en/actions" target="_blank">GitHub Actions Docs ↗</a>
+          <a class="resource-pill" href="https://www.youtube.com/@TechWorldwithNana" target="_blank">TechWorld with Nana YouTube ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/cicd-testers/" target="_blank">Udemy: CI/CD for Test Automation: Jenkins & GitHub Actions ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/jenkins-cicd-25-jenkinsfile-3-projects-interview-prep/" target="_blank">Udemy: Jenkins CI/CD Bootcamp – 25+ Jenkinsfiles ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-for-devops/9781492057680/" target="_blank">O'Reilly: Python for DevOps – CI/CD chapters ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/continuous-delivery-in/9781491986011/" target="_blank">O'Reilly: Continuous Delivery in Java ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent4)" data-week="11">
+        <div class="week-header">
+          <span class="week-title">Week 11 — Docker Basics</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Containers</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>What Docker is: containers vs VMs, images, Dockerfiles</li>
+          <li>Running your test suite inside a Docker container</li>
+          <li>docker pull, run, build, ps, logs — the 5 commands you actually need</li>
+          <li>Why this impresses hiring managers at automation roles</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://labs.play-with-docker.com/" target="_blank">Play With Docker (free) ↗</a>
+          <a class="resource-pill" href="https://docs.docker.com/get-started/" target="_blank">Docker Getting Started ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/docker-kubernetes-the-practical-guide/" target="_blank">Udemy: Docker & Kubernetes – The Practical Guide (4.7★ 300K students) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/learn-docker/" target="_blank">Udemy: Docker for the Absolute Beginner – KodeKloud ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/docker-deep-dive/9781800565135/" target="_blank">O'Reilly: Docker Deep Dive – Nigel Poulton ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-for-devops/9781492057680/" target="_blank">O'Reilly: Python for DevOps – Docker chapter ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 5 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(167,139,250,0.08);color:var(--accent5);border:1px solid rgba(167,139,250,0.2)">
+      <span class="dot" style="background:var(--accent5)"></span>
+      Phase 5 · Weeks 12–14 · Data Analytics Track
+    </div>
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">EXCEL ADVANCED + POWER BI</span>
+      <span class="section-duration">3 weeks · ~45 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:var(--accent5)" data-week="12">
+        <div class="week-header">
+          <span class="week-title">Week 12 — Advanced Excel</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Excel Power User</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>VLOOKUP, XLOOKUP, INDEX/MATCH — eliminate manual lookups forever</li>
+          <li>Pivot Tables & Pivot Charts — summarise thousands of rows instantly</li>
+          <li>SUMIFS, COUNTIFS, nested IF, IFERROR for robust formulas</li>
+          <li>Power Query: import, clean and transform data without code</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://exceljet.net/" target="_blank">ExcelJet.net (free) ↗</a>
+          <a class="resource-pill" href="https://chandoo.org/wp/excel-tutorials/" target="_blank">Chandoo.org ↗</a>
+          <a class="resource-pill" href="https://www.youtube.com/@MrExcel" target="_blank">MrExcel YouTube ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/microsoft-excel-2013-from-beginner-to-advanced-and-beyond/" target="_blank">Udemy: Microsoft Excel – Excel from Beginner to Advanced (4.7★) ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/microsoft-excel-power-query-power-pivot-dax/" target="_blank">Udemy: Excel BI: Power Query & DAX – Maven Analytics ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/excel-the-missing/9780596006136/" target="_blank">O'Reilly: Excel: The Missing Manual – Matthew MacDonald ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/python-for-excel/9781492080992/" target="_blank">O'Reilly: Python for Excel – Felix Zumstein ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent5)" data-week="13">
+        <div class="week-header">
+          <span class="week-title">Week 13 — Power BI Fundamentals</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Data Viz</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Connecting Power BI to Excel, CSV and SQL data sources</li>
+          <li>Building your first dashboard: bar, line, pie, card visuals</li>
+          <li>DAX basics: calculated columns, measures, CALCULATE function</li>
+          <li>Slicers, filters, drill-through for interactive dashboards</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://learn.microsoft.com/en-us/training/powerplatform/power-bi" target="_blank">Microsoft Learn Power BI (free) ↗</a>
+          <a class="resource-pill" href="https://www.youtube.com/@GuyInACube" target="_blank">Guy in a Cube YouTube ↗</a>
+          <a class="resource-pill" href="https://www.sqlbi.com/guides/dax/" target="_blank">SQLBI DAX Guide ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/microsoft-power-bi-up-running-with-power-bi-desktop/" target="_blank">Udemy: Microsoft Power BI Desktop for Business Intelligence – Maven Analytics #1 Bestseller ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/the-complete-power-bi-practical-course/" target="_blank">Udemy: The Complete Power BI Practical Course 2026 ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/learning-microsoft-power/9781098112837/" target="_blank">O'Reilly: Learning Microsoft Power BI – Jeremie Cormier ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/pub/au/4258" target="_blank">O'Reilly: Power BI: Complete Beginner to Advanced (O'Reilly Course) ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+      <div class="week-card" style="border-left-color:var(--accent5)" data-week="14">
+        <div class="week-header">
+          <span class="week-title">Week 14 — Power BI Advanced + Real Projects</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Portfolio Ready</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Data modelling: star schema, relationships, fact vs dimension tables</li>
+          <li>Publishing reports to Power BI Service, sharing with stakeholders</li>
+          <li>Project: build an executive-style sales/HR dashboard with real open data</li>
+          <li>Connect your test automation results to a Power BI dashboard — unique differentiator</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://www.udemy.com/course/microsoft-power-bi-up-running-with-power-bi-desktop/" target="_blank">Maven Analytics Power BI (~£12) ↗</a>
+          <a class="resource-pill" href="https://www.kaggle.com/datasets" target="_blank">Kaggle Datasets (free) ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/advanced-dax-for-power-bi/" target="_blank">Udemy: Advanced DAX for Power BI – Maven Analytics ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/data-analysis-projects-using-sql-power-bi-tableau-excel/" target="_blank">Udemy: Data Analysis: SQL, Power BI & Excel – Real Projects (4.5★ Updated 5/2026) ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/learning-microsoft-power/9781098112837/" target="_blank">O'Reilly: Learning Microsoft Power BI – Full Book ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/dax-formulas-for/9781615470013/" target="_blank">O'Reilly: DAX Formulas for Power Pivot ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PHASE 6 -->
+  <div class="phase">
+    <div class="phase-label" style="background:rgba(0,212,170,0.08);color:#00d4aa;border:1px solid rgba(0,212,170,0.2)">
+      <span class="dot" style="background:#00d4aa"></span>
+      Phase 6 · Weeks 15–16 · AI Integration + Portfolio
+    </div>
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">AI-ASSISTED AUTOMATION + FINAL PUSH</span>
+      <span class="section-duration">2 weeks · ~60 min/day</span>
+    </div>
+    <div class="weeks-grid">
+      <div class="week-card" style="border-left-color:#00d4aa" data-week="15">
+        <div class="week-header">
+          <span class="week-title">Week 15 — AI Workflows in Automation</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">AI-Augmented</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Using Claude/Copilot to generate, debug and explain test scripts at speed</li>
+          <li>AI-generated test data, edge cases and test plans</li>
+          <li>Self-healing locators concept — future of automation</li>
+          <li>Prompting strategies: how to give AI context so it writes better code</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://claude.ai" target="_blank">Claude.ai ↗</a>
+          <a class="resource-pill" href="https://github.com/features/copilot" target="_blank">GitHub Copilot (free trial) ↗</a>
+          <a class="resource-pill" href="https://applitools.com/blog/ai-test-automation/" target="_blank">Applitools AI Testing Blog ↗</a>
+        </div>
+      </div>
+      <div class="week-card" style="border-left-color:#00d4aa" data-week="16">
+        <div class="week-header">
+          <span class="week-title">Week 16 — Portfolio Sprint + Job Prep</span>
+          <div style="display:flex;align-items:center;gap:8px">
+            <span class="week-tag">Launch Ready</span>
+            <button class="check-btn" onclick="toggleDone(this)">Mark Done</button>
+          </div>
+        </div>
+        <ul class="week-tasks">
+          <li>Polish all GitHub repos: clean READMEs, screenshots, setup instructions</li>
+          <li>Update LinkedIn: add skills, projects, and certifications earned</li>
+          <li>Mock interview prep: 10 most common automation engineer interview questions</li>
+          <li>Apply to 3+ roles per week — you are ready</li>
+        </ul>
+        <div class="week-resources">
+          <a class="resource-pill" href="https://www.linkedin.com/help/linkedin/answer/a554495" target="_blank">LinkedIn Profile Tips ↗</a>
+          <a class="resource-pill" href="https://www.glassdoor.co.uk/Interview/automation-engineer-interview-questions-SRCH_KO0,19.htm" target="_blank">Glassdoor Interview Q&amp;A ↗</a>
+          <a class="resource-pill" href="https://github.com/" target="_blank">GitHub ↗</a>
+        
+          <div class="alt-resources">
+            <div class="alt-label">Best Udemy &amp; O'Reilly Alternatives</div>
+            <div class="alt-pills">
+              <a class="udemy-pill" href="https://www.udemy.com/course/the-complete-linkedin-profile-masterclass/" target="_blank">Udemy: The Complete LinkedIn Profile Masterclass ↗</a><a class="udemy-pill" href="https://www.udemy.com/course/job-interview-skills/" target="_blank">Udemy: Job Interview Skills – How to Get a Job in Tech ↗</a>
+              <a class="oreilly-pill" href="https://www.oreilly.com/library/view/cracking-the-coding/9780984782857/" target="_blank">O'Reilly: Cracking the Coding Interview (O'Reilly) ↗</a><a class="oreilly-pill" href="https://www.oreilly.com/library/view/the-software-engineers/9781098143336/" target="_blank">O'Reilly: The Software Engineer's Guidebook ↗</a>
+            </div>
+          </div>
+          </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROJECTS BUILT -->
+  <div class="divider"></div>
+  <div class="section-header">
+    <span class="section-num">★</span>
+    <span class="section-title">8 PROJECTS YOU'LL BUILD</span>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent1)">
+    <div class="project-name">1. CSV Data Processor</div>
+    <div class="project-desc">A Python script that reads a real dataset, cleans it and outputs a formatted summary report. Proves you can write practical automation.</div>
+    <div class="project-tags"><span class="badge badge-cyan">Python</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 2</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent2)">
+    <div class="project-name">2. Selenium Login + Form Automation</div>
+    <div class="project-desc">Full end-to-end browser automation script that navigates, fills forms, handles errors and captures screenshots on failure.</div>
+    <div class="project-tags"><span class="badge badge-red">Selenium</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 4</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent2)">
+    <div class="project-name">3. Playwright E2E Test Suite</div>
+    <div class="project-desc">A structured Page Object Model test suite covering a demo e-commerce site — login, search, cart, checkout. Interview gold.</div>
+    <div class="project-tags"><span class="badge badge-red">Playwright</span><span class="badge badge-red">Page Object Model</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 7</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent3)">
+    <div class="project-name">4. REST API Test Framework</div>
+    <div class="project-desc">Pytest-based API test framework hitting a real public API — status codes, response schema, data validation, error handling.</div>
+    <div class="project-tags"><span class="badge badge-green">Pytest</span><span class="badge badge-green">API Testing</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 7</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent4)">
+    <div class="project-name">5. CI Pipeline on GitHub Actions</div>
+    <div class="project-desc">Your test suite running automatically in the cloud on every commit. Proves you understand modern DevOps workflows.</div>
+    <div class="project-tags"><span class="badge badge-yellow">CI/CD</span><span class="badge badge-yellow">GitHub Actions</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 10</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent5)">
+    <div class="project-name">6. Advanced Excel Dashboard</div>
+    <div class="project-desc">A fully dynamic Excel report with Pivot Tables, Power Query data cleaning, and an automated summary using advanced formulas.</div>
+    <div class="project-tags"><span class="badge badge-purple">Excel</span><span class="badge badge-purple">Power Query</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 12</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:var(--accent5)">
+    <div class="project-name">7. Power BI Executive Dashboard</div>
+    <div class="project-desc">A multi-page, interactive Power BI report using real open data. Star schema data model, DAX measures, published to Power BI Service.</div>
+    <div class="project-tags"><span class="badge badge-purple">Power BI</span><span class="badge badge-purple">DAX</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 14</span></div>
+  </div>
+
+  <div class="project-card" style="border-top-color:#00d4aa">
+    <div class="project-name">8. AI-Augmented Test Suite</div>
+    <div class="project-desc">A complete automation framework where AI generated the test scripts — but you own every line. Shows employers you're ahead of the curve.</div>
+    <div class="project-tags"><span class="badge" style="background:rgba(0,212,170,0.1);color:#00d4aa;border:1px solid rgba(0,212,170,0.2);font-size:10px;padding:4px 10px;border-radius:2px">AI-Augmented</span><span class="badge" style="background:rgba(255,255,255,0.04);border:1px solid var(--border);color:var(--muted);font-size:10px;padding:4px 10px">Week 15</span></div>
+  </div>
+
+  <!-- TIPS -->
+  <div class="tip-box">
+    <h3>⚡ Rules to stay on track with 30–60 min/day</h3>
+    <ul>
+      <li>Never skip two days in a row — consistency beats intensity every time</li>
+      <li>Use your commute or lunch for watching tutorials; evenings for hands-on coding</li>
+      <li>Every week: write 1 sentence summarising what you learned. Forces retention</li>
+      <li>Use Claude to explain anything confusing instantly — don't lose momentum googling</li>
+      <li>Apply to roles from Week 12 onwards — don't wait until you feel "ready"</li>
+      <li>Tell people at work what you're learning — creates accountability and visibility</li>
+    </ul>
+  </div>
+
+  <!-- CERTIFICATIONS -->
+  <div class="section-header">
+    <span class="section-num">◈</span>
+    <span class="section-title">CERTIFICATIONS TO TARGET</span>
+  </div>
+  <div style="display:grid;gap:8px;margin-bottom:56px">
+    <div class="week-card" style="border-left-color:var(--accent5)">
+      <div class="week-header">
+        <span class="week-title">Microsoft PL-300 — Power BI Data Analyst Associate</span>
+        <span class="badge badge-purple">High Priority</span>
+      </div>
+      <ul class="week-tasks">
+        <li>Industry-recognised, employer-loved, £120–165 to sit. Study after Week 14</li>
+      </ul>
+    </div>
+    <div class="week-card" style="border-left-color:var(--accent1)">
+      <div class="week-header">
+        <span class="week-title">ISTQB Foundation Level</span>
+        <span class="badge badge-cyan">Worth Having</span>
+      </div>
+      <ul class="week-tasks">
+        <li>Software testing theory certification. Low effort, high credibility for QA roles. Sit after Week 11</li>
+      </ul>
+    </div>
+    <div class="week-card" style="border-left-color:var(--accent3)">
+      <div class="week-header">
+        <span class="week-title">Google Data Analytics Certificate (Coursera)</span>
+        <span class="badge badge-green">Optional Boost</span>
+      </div>
+      <ul class="week-tasks">
+        <li>6-month programme, ~5hrs/week. Good if you lean toward the data analytics path</li>
+      </ul>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <p>Built for you · 4-month plan · 30–60 min/day</p>
+      <p style="margin-top:4px">Progress is saved automatically in your browser</p>
+    </div>
+    <div class="footer-accent">WEEK 1 STARTS NOW</div>
+  </footer>
+
+</div>
+
+<!-- ═══════════════════════════════════════════
+     FLOATING TRACKER BUTTON
+═══════════════════════════════════════════ -->
+<button class="tracker-fab" id="trackerFab" onclick="openTracker()" title="Open Progress Tracker">
+  <span class="fab-icon">📊</span>
+  <span class="fab-label">Tracker</span>
+  <span class="fab-badge" id="fabBadge">0%</span>
+</button>
+
+<!-- ═══════════════════════════════════════════
+     TRACKER DRAWER
+═══════════════════════════════════════════ -->
+<div class="tracker-overlay" id="trackerOverlay" onclick="closeTracker()"></div>
+<div class="tracker-drawer" id="trackerDrawer">
+  <div class="tracker-header">
+    <div>
+      <div class="tracker-title">PROGRESS TRACKER</div>
+      <div class="tracker-subtitle">Your automation mastery journey</div>
+    </div>
+    <button class="tracker-close" onclick="closeTracker()">✕</button>
+  </div>
+
+  <!-- Overall ring + stats -->
+  <div class="tracker-hero">
+    <div class="ring-wrap">
+      <svg class="progress-ring" width="120" height="120" viewBox="0 0 120 120">
+        <circle class="ring-bg" cx="60" cy="60" r="50" />
+        <circle class="ring-fill" id="ringFill" cx="60" cy="60" r="50"
+          stroke-dasharray="314.16" stroke-dashoffset="314.16" />
+      </svg>
+      <div class="ring-text">
+        <div class="ring-pct" id="ringPct">0%</div>
+        <div class="ring-sub">complete</div>
+      </div>
+    </div>
+    <div class="tracker-kpis">
+      <div class="kpi-box">
+        <div class="kpi-num" id="kpiDone">0</div>
+        <div class="kpi-lbl">Weeks Done</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num" id="kpiLeft">16</div>
+        <div class="kpi-lbl">Remaining</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num" id="kpiStreak">0</div>
+        <div class="kpi-lbl">Day Streak</div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-num" id="kpiEta">—</div>
+        <div class="kpi-lbl">Est. Finish</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Phase breakdown -->
+  <div class="tracker-section-title">PHASE BREAKDOWN</div>
+  <div class="phase-breakdown" id="phaseBreakdown"></div>
+
+  <!-- Weekly checklist -->
+  <div class="tracker-section-title" style="margin-top:24px">WEEK-BY-WEEK CHECKLIST</div>
+  <div class="week-checklist" id="weekChecklist"></div>
+
+  <!-- Notes -->
+  <div class="tracker-section-title" style="margin-top:24px">SESSION NOTES</div>
+  <textarea class="tracker-notes" id="trackerNotes" placeholder="What did you learn today? Paste a code snippet, note a win, or log a struggle..."></textarea>
+  <div class="notes-meta" id="notesMeta">Notes auto-save as you type</div>
+
+  <!-- Log / history -->
+  <div class="tracker-section-title" style="margin-top:24px">ACTIVITY LOG</div>
+  <div class="activity-log" id="activityLog"></div>
+
+  <!-- Actions -->
+  <div class="tracker-actions">
+    <button class="tracker-btn-secondary" onclick="exportProgress()">⬇ Export Progress</button>
+    <button class="tracker-btn-danger" onclick="resetProgress()">↺ Reset All</button>
+  </div>
+</div>
+
+<style>
+/* ── FAB ── */
+.tracker-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: linear-gradient(135deg, #00e5ff, #a78bfa);
+  color: #0a0a0f;
+  border: none;
+  border-radius: 50px;
+  padding: 12px 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 4px 24px rgba(0,229,255,0.35);
+  z-index: 900;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tracker-fab:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,229,255,0.45); }
+.fab-icon { font-size: 16px; }
+.fab-badge {
+  background: rgba(0,0,0,0.25);
+  border-radius: 20px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-family: 'DM Mono', monospace;
+  font-weight: 500;
+}
+
+/* ── OVERLAY ── */
+.tracker-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+.tracker-overlay.open { display: block; }
+
+/* ── DRAWER ── */
+.tracker-drawer {
+  position: fixed;
+  top: 0;
+  right: -520px;
+  width: 100%;
+  max-width: 500px;
+  height: 100vh;
+  background: #0e0e17;
+  border-left: 1px solid #1e1e2e;
+  z-index: 1001;
+  overflow-y: auto;
+  padding: 28px 24px 60px;
+  transition: right 0.35s cubic-bezier(0.4,0,0.2,1);
+  scrollbar-width: thin;
+  scrollbar-color: #1e1e2e transparent;
+}
+.tracker-drawer.open { right: 0; }
+
+/* ── DRAWER HEADER ── */
+.tracker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 28px;
+}
+.tracker-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 32px;
+  letter-spacing: 0.05em;
+  color: #e8e8f0;
+}
+.tracker-subtitle {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #6b6b80;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+.tracker-close {
+  background: none;
+  border: 1px solid #1e1e2e;
+  color: #6b6b80;
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  flex-shrink: 0;
+}
+.tracker-close:hover { border-color: #ff4d6d; color: #ff4d6d; }
+
+/* ── HERO ── */
+.tracker-hero {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #13131c;
+  border: 1px solid #1e1e2e;
+  border-radius: 4px;
+  padding: 20px;
+  margin-bottom: 28px;
+}
+.ring-wrap {
+  position: relative;
+  flex-shrink: 0;
+}
+.progress-ring { transform: rotate(-90deg); }
+.ring-bg { fill: none; stroke: #1e1e2e; stroke-width: 8; }
+.ring-fill {
+  fill: none;
+  stroke: url(#ringGrad);
+  stroke-width: 8;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 0.6s ease;
+}
+.ring-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+  pointer-events: none;
+}
+.ring-pct {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 26px;
+  color: #00e5ff;
+  line-height: 1;
+}
+.ring-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  color: #6b6b80;
+  letter-spacing: 0.1em;
+  margin-top: 2px;
+}
+.tracker-kpis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  flex: 1;
+}
+.kpi-box {
+  background: #0a0a0f;
+  border: 1px solid #1e1e2e;
+  border-radius: 4px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.kpi-num {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 24px;
+  color: #e8e8f0;
+  line-height: 1;
+}
+.kpi-lbl {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: #6b6b80;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+/* ── SECTION TITLES ── */
+.tracker-section-title {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: #6b6b80;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.tracker-section-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: #1e1e2e;
+}
+
+/* ── PHASE BREAKDOWN ── */
+.phase-breakdown { display: flex; flex-direction: column; gap: 8px; }
+.phase-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.phase-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #a0a0b8;
+  width: 120px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.phase-bar-wrap {
+  flex: 1;
+  height: 6px;
+  background: #1e1e2e;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.phase-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  transition: width 0.5s ease;
+}
+.phase-pct {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #6b6b80;
+  width: 32px;
+  text-align: right;
+  flex-shrink: 0;
+}
+
+/* ── WEEK CHECKLIST ── */
+.week-checklist { display: flex; flex-direction: column; gap: 4px; }
+.checklist-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: #13131c;
+  border: 1px solid #1e1e2e;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  user-select: none;
+}
+.checklist-item:hover { background: #16161f; }
+.checklist-item.checked {
+  background: rgba(184,255,60,0.04);
+  border-color: rgba(184,255,60,0.15);
+}
+.checklist-item.checked .check-circle {
+  background: var(--accent3, #b8ff3c);
+  border-color: var(--accent3, #b8ff3c);
+}
+.checklist-item.checked .check-circle::after { opacity: 1; }
+.checklist-item.checked .cl-week-name { color: #6b6b80; text-decoration: line-through; }
+.check-circle {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid #2e2e44;
+  flex-shrink: 0;
+  position: relative;
+  transition: all 0.2s;
+  background: transparent;
+}
+.check-circle::after {
+  content: '✓';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  font-size: 9px;
+  color: #0a0a0f;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.cl-week-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #6b6b80;
+  width: 16px;
+  flex-shrink: 0;
+}
+.cl-week-name {
+  font-size: 13px;
+  color: #c0c0d8;
+  flex: 1;
+  transition: color 0.2s;
+}
+.cl-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #6b6b80;
+}
+
+/* ── NOTES ── */
+.tracker-notes {
+  width: 100%;
+  height: 120px;
+  background: #13131c;
+  border: 1px solid #1e1e2e;
+  border-radius: 4px;
+  color: #c0c0d8;
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  padding: 12px;
+  resize: vertical;
+  outline: none;
+  transition: border-color 0.2s;
+}
+.tracker-notes:focus { border-color: rgba(0,229,255,0.3); }
+.notes-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #3a3a50;
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* ── ACTIVITY LOG ── */
+.activity-log {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-height: 220px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+.log-entry {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 8px 12px;
+  background: #13131c;
+  border: 1px solid #1e1e2e;
+  border-radius: 4px;
+  font-size: 12px;
+}
+.log-date {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: #6b6b80;
+  flex-shrink: 0;
+}
+.log-text { color: #a0a0b8; }
+.log-empty {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: #3a3a50;
+  text-align: center;
+  padding: 16px;
+}
+
+/* ── ACTIONS ── */
+.tracker-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 28px;
+}
+.tracker-btn-secondary {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid #1e1e2e;
+  color: #6b6b80;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.tracker-btn-secondary:hover { border-color: #a78bfa; color: #a78bfa; }
+.tracker-btn-danger {
+  flex: 1;
+  padding: 10px;
+  background: transparent;
+  border: 1px solid rgba(255,77,109,0.2);
+  color: rgba(255,77,109,0.6);
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  border-radius: 4px;
+  cursor: pointer;
+  letter-spacing: 0.05em;
+  transition: all 0.2s;
+}
+.tracker-btn-danger:hover { border-color: #ff4d6d; color: #ff4d6d; background: rgba(255,77,109,0.05); }
+</style>
+
+<svg width="0" height="0" style="position:absolute">
+  <defs>
+    <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+  </defs>
+</svg>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+const WEEKS = [
+  { week: 1,  name: 'Python Basics',                    phase: 'Python Fundamentals',   phaseColor: '#00e5ff' },
+  { week: 2,  name: 'Functions, Files & Error Handling',phase: 'Python Fundamentals',   phaseColor: '#00e5ff' },
+  { week: 3,  name: 'OOP & Modules',                    phase: 'Python Fundamentals',   phaseColor: '#00e5ff' },
+  { week: 4,  name: 'Selenium Fundamentals',             phase: 'Automation Core',       phaseColor: '#ff4d6d' },
+  { week: 5,  name: 'Playwright',                        phase: 'Automation Core',       phaseColor: '#ff4d6d' },
+  { week: 6,  name: 'API Testing',                       phase: 'Automation Core',       phaseColor: '#ff4d6d' },
+  { week: 7,  name: 'Pytest Framework',                  phase: 'Automation Core',       phaseColor: '#ff4d6d' },
+  { week: 8,  name: 'SQL Basics',                        phase: 'Data + Version Control', phaseColor: '#b8ff3c' },
+  { week: 9,  name: 'Git + GitHub',                      phase: 'Data + Version Control', phaseColor: '#b8ff3c' },
+  { week: 10, name: 'Jenkins CI/CD',                     phase: 'DevOps Essentials',     phaseColor: '#ffaa00' },
+  { week: 11, name: 'Docker Basics',                     phase: 'DevOps Essentials',     phaseColor: '#ffaa00' },
+  { week: 12, name: 'Advanced Excel',                    phase: 'Data Analytics',        phaseColor: '#a78bfa' },
+  { week: 13, name: 'Power BI Fundamentals',             phase: 'Data Analytics',        phaseColor: '#a78bfa' },
+  { week: 14, name: 'Power BI Advanced',                 phase: 'Data Analytics',        phaseColor: '#a78bfa' },
+  { week: 15, name: 'AI Automation Workflows',           phase: 'AI + Portfolio',        phaseColor: '#00d4aa' },
+  { week: 16, name: 'Portfolio Sprint + Job Prep',       phase: 'AI + Portfolio',        phaseColor: '#00d4aa' },
+];
+
+const PHASES = [
+  { name: 'Python Fundamentals',    weeks: [1,2,3],          color: '#00e5ff' },
+  { name: 'Automation Core',        weeks: [4,5,6,7],        color: '#ff4d6d' },
+  { name: 'Data + Version Control', weeks: [8,9],            color: '#b8ff3c' },
+  { name: 'DevOps Essentials',      weeks: [10,11],          color: '#ffaa00' },
+  { name: 'Data Analytics',         weeks: [12,13,14],       color: '#a78bfa' },
+  { name: 'AI + Portfolio',         weeks: [15,16],          color: '#00d4aa' },
+];
+
+// ══════════════════════════════════════════
+// STATE
+// ══════════════════════════════════════════
+function loadState() {
+  try {
+    return JSON.parse(localStorage.getItem('roadmap_v2') || '{}');
+  } catch(e) { return {}; }
+}
+function saveState(s) {
+  localStorage.setItem('roadmap_v2', JSON.stringify(s));
+}
+
+let state = loadState();
+if (!state.completed) state.completed = {};
+if (!state.notes) state.notes = '';
+if (!state.log) state.log = [];
+if (!state.streakDate) state.streakDate = null;
+if (!state.streak) state.streak = 0;
+if (!state.startDate) state.startDate = new Date().toISOString().slice(0,10);
+
+// ══════════════════════════════════════════
+// STREAK
+// ══════════════════════════════════════════
+function updateStreak() {
+  const today = new Date().toISOString().slice(0,10);
+  if (state.streakDate === today) return;
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0,10);
+  if (state.streakDate === yesterday) {
+    state.streak = (state.streak || 0) + 1;
+  } else if (state.streakDate !== today) {
+    state.streak = 1;
+  }
+  state.streakDate = today;
+  saveState(state);
+}
+
+// ══════════════════════════════════════════
+// RENDER
+// ══════════════════════════════════════════
+function getDoneWeeks() {
+  return WEEKS.filter(w => state.completed[w.week]).length;
+}
+
+function renderAll() {
+  const done = getDoneWeeks();
+  const total = WEEKS.length;
+  const pct = Math.round((done / total) * 100);
+
+  // Top progress bar
+  const bar = document.getElementById('progress-bar');
+  if (bar) bar.style.width = pct + '%';
+  const lbl = document.getElementById('progress-label');
+  if (lbl) lbl.textContent = `Progress: ${done} of ${total} weeks complete — ${pct}%`;
+
+  // FAB badge
+  const fab = document.getElementById('fabBadge');
+  if (fab) fab.textContent = pct + '%';
+
+  // Ring
+  const circumference = 314.16;
+  const offset = circumference - (pct / 100) * circumference;
+  const ring = document.getElementById('ringFill');
+  if (ring) ring.style.strokeDashoffset = offset;
+  const ringPct = document.getElementById('ringPct');
+  if (ringPct) ringPct.textContent = pct + '%';
+
+  // KPIs
+  document.getElementById('kpiDone').textContent = done;
+  document.getElementById('kpiLeft').textContent = total - done;
+  document.getElementById('kpiStreak').textContent = state.streak || 0;
+
+  // ETA
+  const weeksLeft = total - done;
+  if (weeksLeft === 0) {
+    document.getElementById('kpiEta').textContent = '✓';
+  } else {
+    const eta = new Date();
+    eta.setDate(eta.getDate() + weeksLeft * 7);
+    document.getElementById('kpiEta').textContent = eta.toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+  }
+
+  renderPhases();
+  renderChecklist();
+  renderLog();
+  syncWeekCards();
+}
+
+function renderPhases() {
+  const el = document.getElementById('phaseBreakdown');
+  if (!el) return;
+  el.innerHTML = '';
+  PHASES.forEach(phase => {
+    const phDone = phase.weeks.filter(w => state.completed[w]).length;
+    const phTotal = phase.weeks.length;
+    const phPct = Math.round((phDone / phTotal) * 100);
+    el.innerHTML += `
+      <div class="phase-row">
+        <div class="phase-name">${phase.name}</div>
+        <div class="phase-bar-wrap">
+          <div class="phase-bar-fill" style="width:${phPct}%;background:${phase.color}"></div>
+        </div>
+        <div class="phase-pct">${phPct}%</div>
+      </div>`;
+  });
+}
+
+function renderChecklist() {
+  const el = document.getElementById('weekChecklist');
+  if (!el) return;
+  el.innerHTML = '';
+  WEEKS.forEach(w => {
+    const checked = !!state.completed[w.week];
+    const dateStr = state.completed[w.week] || '';
+    el.innerHTML += `
+      <div class="checklist-item ${checked ? 'checked' : ''}" onclick="toggleWeek(${w.week})">
+        <div class="check-circle"></div>
+        <div class="cl-week-num">${String(w.week).padStart(2,'0')}</div>
+        <div class="cl-week-name">${w.name}</div>
+        <div class="cl-date" style="color:${w.phaseColor};opacity:0.7">${dateStr ? new Date(dateStr).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : ''}</div>
+      </div>`;
+  });
+}
+
+function renderLog() {
+  const el = document.getElementById('activityLog');
+  if (!el) return;
+  if (!state.log.length) {
+    el.innerHTML = '<div class="log-empty">No activity yet — mark your first week complete!</div>';
+    return;
+  }
+  el.innerHTML = [...state.log].reverse().slice(0, 20).map(entry =>
+    `<div class="log-entry">
+      <div class="log-date">${entry.date}</div>
+      <div class="log-text">${entry.text}</div>
+    </div>`
+  ).join('');
+}
+
+function syncWeekCards() {
+  WEEKS.forEach(w => {
+    const card = document.querySelector(`.week-card[data-week="${w.week}"]`);
+    if (!card) return;
+    const btn = card.querySelector('.check-btn');
+    if (state.completed[w.week]) {
+      card.classList.add('done');
+      if (btn) btn.textContent = '✓ Done';
+    } else {
+      card.classList.remove('done');
+      if (btn) btn.textContent = 'Mark Done';
+    }
+  });
+}
+
+// ══════════════════════════════════════════
+// TOGGLE
+// ══════════════════════════════════════════
+function toggleWeek(weekNum) {
+  const today = new Date().toISOString().slice(0,10);
+  if (state.completed[weekNum]) {
+    delete state.completed[weekNum];
+    addLog(`↩ Unmarked Week ${weekNum}`);
+  } else {
+    state.completed[weekNum] = today;
+    addLog(`✓ Completed Week ${weekNum}: ${WEEKS[weekNum-1].name}`);
+    updateStreak();
+    // Celebrate if phase complete
+    const phase = PHASES.find(p => p.weeks.includes(weekNum));
+    if (phase && phase.weeks.every(w => state.completed[w])) {
+      addLog(`🎉 Phase "${phase.name}" complete!`);
+    }
+    if (Object.keys(state.completed).length === WEEKS.length) {
+      addLog('🏆 ROADMAP COMPLETE — You did it!');
+    }
+  }
+  saveState(state);
+  renderAll();
+}
+
+// Called from week card "Mark Done" buttons on the main page
+function toggleDone(btn) {
+  const card = btn.closest('.week-card');
+  const weekNum = parseInt(card.dataset.week);
+  toggleWeek(weekNum);
+}
+
+function addLog(text) {
+  const now = new Date();
+  state.log.push({
+    date: now.toLocaleDateString('en-GB', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' }),
+    text
+  });
+}
+
+// ══════════════════════════════════════════
+// NOTES
+// ══════════════════════════════════════════
+let notesTimer;
+function initNotes() {
+  const el = document.getElementById('trackerNotes');
+  if (!el) return;
+  el.value = state.notes || '';
+  el.addEventListener('input', () => {
+    clearTimeout(notesTimer);
+    notesTimer = setTimeout(() => {
+      state.notes = el.value;
+      saveState(state);
+      const meta = document.getElementById('notesMeta');
+      if (meta) {
+        meta.textContent = 'Saved ✓';
+        setTimeout(() => meta.textContent = 'Notes auto-save as you type', 2000);
+      }
+    }, 800);
+  });
+}
+
+// ══════════════════════════════════════════
+// DRAWER
+// ══════════════════════════════════════════
+function openTracker() {
+  document.getElementById('trackerDrawer').classList.add('open');
+  document.getElementById('trackerOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  renderAll();
+  initNotes();
+}
+function closeTracker() {
+  document.getElementById('trackerDrawer').classList.remove('open');
+  document.getElementById('trackerOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+// ══════════════════════════════════════════
+// EXPORT
+// ══════════════════════════════════════════
+function exportProgress() {
+  const done = getDoneWeeks();
+  const pct = Math.round((done / WEEKS.length) * 100);
+  let csv = 'Week,Name,Phase,Status,Completed On\n';
+  WEEKS.forEach(w => {
+    const status = state.completed[w.week] ? 'Complete' : 'Pending';
+    const date = state.completed[w.week] || '';
+    csv += `${w.week},"${w.name}","${w.phase}",${status},${date}\n`;
+  });
+  csv += `\nOverall Progress,${pct}%,,${done}/${WEEKS.length} weeks,\n`;
+  csv += `Streak,${state.streak || 0} days,,Exported ${new Date().toLocaleDateString()},\n`;
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `automation-roadmap-progress-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+}
+
+// ══════════════════════════════════════════
+// RESET
+// ══════════════════════════════════════════
+function resetProgress() {
+  if (!confirm('Reset ALL progress? This cannot be undone.')) return;
+  state = { completed:{}, notes:'', log:[], streak:0, streakDate:null, startDate: new Date().toISOString().slice(0,10) };
+  saveState(state);
+  document.getElementById('trackerNotes').value = '';
+  renderAll();
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+function updateProgress() { renderAll(); } // legacy shim
+
+document.addEventListener('DOMContentLoaded', () => {
+  renderAll();
+});
+</script>
+</body>
+</html>
