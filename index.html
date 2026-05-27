@@ -10,15 +10,14 @@
   FIREBASE — PASTE YOUR CONFIG IN firebase-config.js
   OR replace the import below with your config
 ══════════════════════════════════════ -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-  import { getDatabase, ref, set, get, onValue } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+<script>
+// Firebase loader — loads dynamically, page works fine without it
+window._firebaseSave = null;
+window._firebaseConfigured = false;
+window._state = window._state || {};
 
-  // ╔══════════════════════════════════════════╗
-  // ║  PASTE YOUR FIREBASE CONFIG HERE         ║
-  // ║  (See setup guide at bottom of page)     ║
-  // ╚══════════════════════════════════════════╝
-  const firebaseConfig = {
+(function() {
+  var firebaseConfig = {
     apiKey:            "AIzaSyBV8Dlg0840RF3NPS_kPClYLAG3yF_NAW4",
     authDomain:        "upskill-6a81e.firebaseapp.com",
     databaseURL:       "https://upskill-6a81e-default-rtdb.asia-southeast1.firebasedatabase.app",
@@ -28,43 +27,61 @@
     appId:             "1:48016246460:web:be6b8c106d4f58931bf2b9"
   };
 
-  const FIREBASE_CONFIGURED = !firebaseConfig.apiKey.includes("PASTE");
-  let db = null;
-  const DB_PATH = "roadmap/progress";
-
-  if (FIREBASE_CONFIGURED) {
-    const app = initializeApp(firebaseConfig);
-    db = getDatabase(app);
-    // live sync — any change on another device updates this one
-    onValue(ref(db, DB_PATH), (snapshot) => {
-      if (snapshot.exists()) {
-        const remote = snapshot.val();
-        // merge remote into state without overwriting newer local writes
-        if (remote.subtopics) Object.assign(window._state.subtopics, remote.subtopics);
-        if (remote.weekDates) Object.assign(window._state.weekDates, remote.weekDates);
-        if (remote.subDates)  Object.assign(window._state.subDates,  remote.subDates);
-        if (remote.notes)     window._state.notes   = remote.notes;
-        if (remote.log)       window._state.log     = remote.log;
-        if (remote.streak)    window._state.streak  = remote.streak;
-        if (remote.reflections) Object.assign(window._state.reflections, remote.reflections);
-        if(typeof window.saveLocal==='function') window.saveLocal();
-        if (typeof renderAll === 'function') renderAll();
-      }
+  var CONFIGURED = !firebaseConfig.apiKey.includes("PASTE");
+  if (!CONFIGURED) {
+    document.addEventListener("DOMContentLoaded", function() {
+      document.dispatchEvent(new Event("firebaseReady"));
     });
+    return;
   }
 
-  window._firebaseSave = async function(state) {
-    if (!FIREBASE_CONFIGURED || !db) return;
-    try {
-      await set(ref(db, DB_PATH), JSON.parse(JSON.stringify(state)));
-    } catch(e) { console.warn("Firebase save failed:", e); }
-  };
+  // Dynamically import Firebase ESM modules
+  var appUrl    = "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+  var dbUrl     = "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
+  var DB_PATH   = "roadmap/progress";
 
-  window._firebaseConfigured = FIREBASE_CONFIGURED;
-  window._dispatchReady = function() {
-    document.dispatchEvent(new Event('firebaseReady'));
-  };
-  window._dispatchReady();
+  Promise.all([import(appUrl), import(dbUrl)]).then(function(mods) {
+    var initializeApp = mods[0].initializeApp;
+    var getDatabase   = mods[1].getDatabase;
+    var ref           = mods[1].ref;
+    var set           = mods[1].set;
+    var onValue       = mods[1].onValue;
+
+    var app = initializeApp(firebaseConfig);
+    var db  = getDatabase(app);
+
+    window._firebaseConfigured = true;
+
+    // Save function exposed to main script
+    window._firebaseSave = function(state) {
+      return set(ref(db, DB_PATH), JSON.parse(JSON.stringify(state)))
+        .catch(function(e){ console.warn("Firebase save error:", e); });
+    };
+
+    // Live sync — any change on another device updates this one instantly
+    onValue(ref(db, DB_PATH), function(snapshot) {
+      if (!snapshot.exists()) return;
+      var remote = snapshot.val();
+      var S = window._state;
+      if (!S) return;
+      if (remote.subtopics)   Object.assign(S.subtopics,   remote.subtopics);
+      if (remote.weekDates)   Object.assign(S.weekDates,   remote.weekDates);
+      if (remote.subDates)    Object.assign(S.subDates,    remote.subDates);
+      if (remote.notes)       S.notes     = remote.notes;
+      if (remote.log)         S.log       = remote.log;
+      if (remote.streak)      S.streak    = remote.streak;
+      if (remote.reflections) Object.assign(S.reflections, remote.reflections);
+      if (typeof window.saveLocal === "function") window.saveLocal();
+      if (typeof renderAll === "function") renderAll();
+    });
+
+    document.dispatchEvent(new Event("firebaseReady"));
+
+  }).catch(function(err) {
+    console.warn("Firebase failed to load (offline or blocked):", err);
+    document.dispatchEvent(new Event("firebaseReady"));
+  });
+})();
 </script>
 
 <style>
@@ -315,6 +332,42 @@ footer p{font-family:'DM Mono',monospace;font-size:11px;color:var(--muted);lette
 .cal-day.today{border-color:var(--c1);color:var(--c1);font-weight:600;}
 .cal-day.has-activity{background:rgba(0,229,255,.08);border-color:rgba(0,229,255,.25);}
 .cal-day.empty{background:transparent;border-color:transparent;pointer-events:none;}
+
+  /* ── SUBTOPIC ROWS IN TRACKER ── */
+  .wk-expand-btn {
+    background: none; border: none; color: var(--muted);
+    font-family: 'DM Mono', monospace; font-size: 10px;
+    cursor: pointer; padding: 0 4px; transition: color .2s; flex-shrink:0;
+  }
+  .wk-expand-btn:hover { color: var(--c1); }
+  .wk-subtopics {
+    display: none; flex-direction: column; gap: 3px;
+    margin-top: 6px; padding-top: 6px;
+    border-top: 1px dashed rgba(255,255,255,.07);
+  }
+  .wk-subtopics.open { display: flex; }
+  .sub-row {
+    display: flex; align-items: center; gap: 8px;
+    padding: 5px 6px; border-radius: 3px; cursor: pointer;
+    transition: background .15s; user-select: none;
+  }
+  .sub-row:hover { background: rgba(255,255,255,.04); }
+  .sub-row.sub-done .sub-cb { background: var(--c3); border-color: var(--c3); }
+  .sub-row.sub-done .sub-cb::after { opacity: 1; }
+  .sub-row.sub-done .sub-label { color: var(--muted); text-decoration: line-through; }
+  .sub-cb {
+    width: 13px; height: 13px; border-radius: 2px;
+    border: 1px solid #2e2e44; flex-shrink: 0;
+    position: relative; transition: all .2s; background: transparent;
+  }
+  .sub-cb::after {
+    content: '✓'; position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%,-50%); font-size: 8px;
+    color: #0a0a0f; font-weight: 700; opacity: 0; transition: opacity .2s;
+  }
+  .sub-label { font-size: 11px; color: #a0a0b8; flex: 1; line-height: 1.4; }
+  .sub-date { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--muted); flex-shrink:0; }
+
 </style>
 </head>
 <body>
@@ -1054,15 +1107,37 @@ function renderAll(){
 }
 
 function renderPhaseRows(){
-  const cont=document.getElementById("phaseRows");if(!cont)return;
+  var cont=document.getElementById("phaseRows");if(!cont)return;
   cont.innerHTML="";
-  PHASES_DATA.forEach(ph=>{
-    const total=ph.weeks.reduce((a,w)=>a+WEEKS_DATA[w-1].subs,0);
-    const done=ph.weeks.reduce((a,w)=>a+doneSubsCount(w),0);
-    const pct=Math.round((done/total)*100);
-    cont.innerHTML+='<div class="ph-row"><div class="ph-name">'+ph.name+'</div><div class="ph-bar-bg"><div class="ph-bar-fill" style="width:'+pct+'%;background:'+ph.color+'"></div></div><div class="ph-pct">'+pct+'%</div></div>';
+  PHASES_DATA.forEach(function(ph){
+    var total=ph.weeks.reduce(function(a,w){return a+WEEKS_DATA[w-1].subs;},0);
+    var done=ph.weeks.reduce(function(a,w){return a+doneSubsCount(w);},0);
+    var pct=Math.round((done/total)*100);
+    var row=document.createElement("div");
+    row.className="ph-row";
+    row.innerHTML="<div class=\"ph-name\">"+ph.name+"</div><div class=\"ph-bar-bg\"><div class=\"ph-bar-fill\" style=\"width:"+pct+"%;background:"+ph.color+"\"></div></div><div class=\"ph-pct\">"+pct+"%</div>";
+    cont.appendChild(row);
   });
 }
+
+const SUBTOPICS_DATA = {
+  1: ["Variables, data types, strings, numbers, booleans", "If/else logic, loops (for, while), basic functions", "Lists, dictionaries, tuples — Python's bread and butter", "Daily practice: solve 1 problem on Exercism.io"],
+  2: ["Writing reusable functions with parameters & return values", "Reading/writing CSV and text files (os, csv, json modules)", "Try/except error handling — essential for automation scripts", "Mini project: script that reads a CSV and outputs a summary"],
+  3: ["Classes, objects, inheritance — how test frameworks are structured", "pip, virtual environments, requirements.txt", "Using AI (Claude/ChatGPT) to explain code you don't understand", "Mini project: class-based to-do list CLI app"],
+  4: ["Setting up Selenium with Python + ChromeDriver", "Locating elements: ID, CSS selectors, XPath", "Clicking, typing, waiting, form submission", "Project: automate login form on the-internet.herokuapp.com"],
+  5: ["Why Playwright is replacing Selenium at many companies", "Setting up Playwright Python, running headless tests", "Page Object Model pattern — critical for interviews", "Use Claude to generate a Playwright test, then understand every line"],
+  6: ["HTTP basics: GET, POST, PUT, DELETE, status codes", "Postman: send requests, inspect responses, write test scripts", "Python requests library: automate API calls in scripts", "Project: test a public API (JSONPlaceholder/ReqRes) with assertions"],
+  7: ["Writing test cases with pytest — fixtures, markers, parametrize", "Combining Playwright + Pytest for structured test suites", "HTML test reports with pytest-html", "Project: full E2E test suite for a demo e-commerce site"],
+  8: ["SELECT, WHERE, ORDER BY, GROUP BY, JOIN fundamentals", "Writing queries against real data in SQLiteOnline.com", "How automation engineers use SQL to validate backend data", "Practice: solve 20 problems on SQLZoo or Mode Analytics"],
+  9: ["Git init, add, commit, push, pull, branch, merge", "GitHub: repos, pull requests, README files", "Upload ALL previous projects to GitHub — this is your portfolio", "Branching strategy used in real teams (feature branches, main/dev)"],
+  10: ["What CI/CD is and why it matters in automation engineering", "Setting up Jenkins locally, creating a basic pipeline", "Triggering your Pytest suite automatically on code push", "Reading Jenkins build logs and diagnosing failures"],
+  11: ["What Docker is: containers vs VMs, images, Dockerfiles", "Running your test suite inside a Docker container", "docker pull, run, build, ps, logs — the 5 commands you need", "Why this impresses hiring managers at automation roles"],
+  12: ["VLOOKUP, XLOOKUP, INDEX/MATCH — eliminate manual lookups", "Pivot Tables & Pivot Charts — summarise thousands of rows instantly", "SUMIFS, COUNTIFS, nested IF, IFERROR for robust formulas", "Power Query: import, clean and transform data without code"],
+  13: ["Connecting Power BI to Excel, CSV and SQL data sources", "Building first dashboard: bar, line, pie, card visuals", "DAX basics: calculated columns, measures, CALCULATE function", "Slicers, filters, drill-through for interactive dashboards"],
+  14: ["Data modelling: star schema, relationships, fact vs dimension tables", "Publishing reports to Power BI Service, sharing with stakeholders", "Project: executive-style sales/HR dashboard with real open data", "Connect test automation results to Power BI — unique differentiator"],
+  15: ["Using Claude/Copilot to generate, debug and explain test scripts", "AI-generated test data, edge cases and test plans", "Self-healing locators concept — future of automation", "Prompting strategies: give AI context to write better code"],
+  16: ["Polish all GitHub repos: clean READMEs, screenshots, setup instructions", "Update LinkedIn: add skills, projects, and certifications earned", "Mock interview prep: 10 most common automation engineer questions", "Apply to 3+ roles per week — you are ready"],
+};
 
 function renderWeekList(){
   const cont=document.getElementById("wkList");if(!cont)return;
@@ -1071,8 +1146,63 @@ function renderWeekList(){
     const done=doneSubsCount(wd.w),total=wd.subs,pct=Math.round((done/total)*100);
     const isDone=isWeekDone(wd.w);
     const dateStr=S.weekDates[wd.w]?fmtDate(S.weekDates[wd.w]):"";
-    cont.innerHTML+='<div class="wk-item '+( isDone?"wk-done":"")+'" onclick="toggleWeekFromTracker('+wd.w+')"><div class="wk-color-bar" style="background:'+wd.color+'"></div><div class="wk-body"><div class="wk-top"><div class="wk-num">W'+String(wd.w).padStart(2,"0")+'</div><div class="wk-name">'+wd.name+'</div><div class="wk-date">'+( isDone?"Done "+dateStr:done+"/"+total)+'</div></div><div class="wk-mini-prog"><div class="wk-mini-fill" style="width:'+pct+'%;background:'+wd.color+'"></div></div></div></div>';
+    const subs=SUBTOPICS_DATA[wd.w]||[];
+    const arr=getWeekSubs(wd.w);
+    let subRows="";
+    subs.forEach((txt,i)=>{
+      const key=wd.w+"-"+i;
+      const isDoneSub=arr[i]||false;
+      const subDate=S.subDates[key]?fmtDate(S.subDates[key]):"";
+      subRows+="<div class='sub-row "+(isDoneSub?"sub-done":"")+"' onclick='event.stopPropagation();trackerToggleSub("+wd.w+","+i+")'>"
+        +"<div class='sub-cb'></div>"
+        +"<div class='sub-label'>"+txt+"</div>"
+        +"<div class='sub-date'>"+subDate+"</div>"
+        +"</div>";
+    });
+    cont.innerHTML+="<div class='wk-item "+(isDone?"wk-done":"")+"' id='wk-tracker-"+wd.w+"'>"
+      +"<div class='wk-color-bar' style='background:"+wd.color+"'></div>"
+      +"<div class='wk-body'>"
+        +"<div class='wk-top' onclick='toggleWeekExpand("+wd.w+")' style='cursor:pointer'>"
+          +"<div class='wk-num'>W"+String(wd.w).padStart(2,"0")+"</div>"
+          +"<div class='wk-name'>"+wd.name+"</div>"
+          +"<div style='display:flex;align-items:center;gap:6px;flex-shrink:0'>"
+            +"<div class='wk-date' style='color:"+wd.color+"'>"+(isDone?"✓ "+dateStr:done+"/"+total+" done")+"</div>"
+            +"<button class='wk-expand-btn' id='exp-btn-"+wd.w+"' onclick='event.stopPropagation();toggleWeekExpand("+wd.w+")'>▶</button>"
+          +"</div>"
+        +"</div>"
+        +"<div class='wk-mini-prog'><div class='wk-mini-fill' style='width:"+pct+"%;background:"+wd.color+"'></div></div>"
+        +"<div class='wk-subtopics' id='wk-subs-"+wd.w+"'>"+subRows+"</div>"
+      +"</div>"
+    +"</div>";
   });
+}
+
+function toggleWeekExpand(week){
+  const subsEl=document.getElementById("wk-subs-"+week);
+  const btn=document.getElementById("exp-btn-"+week);
+  if(!subsEl)return;
+  const isOpen=subsEl.classList.toggle("open");
+  if(btn)btn.textContent=isOpen?"▼":"▶";
+}
+
+function trackerToggleSub(week,idx){
+  toggleSub(week,idx);
+  const subsEl=document.getElementById("wk-subs-"+week);
+  if(!subsEl||!subsEl.classList.contains("open"))return;
+  const subs=SUBTOPICS_DATA[week]||[];
+  const arr=getWeekSubs(week);
+  let subRows="";
+  subs.forEach((txt,i)=>{
+    const key=week+"-"+i;
+    const isDoneSub=arr[i]||false;
+    const subDate=S.subDates[key]?fmtDate(S.subDates[key]):"";
+    subRows+="<div class='sub-row "+(isDoneSub?"sub-done":"")+"' onclick='event.stopPropagation();trackerToggleSub("+week+","+i+")'>"
+      +"<div class='sub-cb'></div>"
+      +"<div class='sub-label'>"+txt+"</div>"
+      +"<div class='sub-date'>"+subDate+"</div>"
+      +"</div>";
+  });
+  subsEl.innerHTML=subRows;
 }
 
 function toggleWeekFromTracker(week){
@@ -1151,9 +1281,21 @@ function initNotes(){
   };
   const rc=document.getElementById("reflections");if(!rc)return;
   rc.innerHTML="";
-  WEEKS_DATA.forEach(wd=>{
-    const val=S.reflections[wd.w]||"";
-    rc.innerHTML+='<div style="margin-bottom:6px"><div style="font-family:DM Mono,monospace;font-size:10px;color:var(--muted);margin-bottom:3px">Week '+wd.w+": "+wd.name+"</div><textarea style="width:100%;height:48px;background:#13131c;border:1px solid var(--border);border-radius:3px;color:#c0c0d8;font-family:DM Mono,monospace;font-size:11px;padding:7px;resize:none;outline:none;" placeholder="Key takeaway..." onchange="saveReflection("+wd.w+",this.value)">"+val+"</textarea></div>";
+  WEEKS_DATA.forEach(function(wd){
+    var val=S.reflections[wd.w]||"";
+    var wrap=document.createElement("div");
+    wrap.style.marginBottom="6px";
+    var lbl=document.createElement("div");
+    lbl.style.cssText="font-family:DM Mono,monospace;font-size:10px;color:var(--muted);margin-bottom:3px";
+    lbl.textContent="Week "+wd.w+": "+wd.name;
+    var ta=document.createElement("textarea");
+    ta.style.cssText="width:100%;height:48px;background:#13131c;border:1px solid var(--border);border-radius:3px;color:#c0c0d8;font-family:DM Mono,monospace;font-size:11px;padding:7px;resize:none;outline:none;";
+    ta.placeholder="Key takeaway...";
+    ta.value=val;
+    (function(w){ta.onchange=function(){saveReflection(w,this.value);};})(wd.w);
+    wrap.appendChild(lbl);
+    wrap.appendChild(ta);
+    rc.appendChild(wrap);
   });
 }
 function saveReflection(week,val){S.reflections[week]=val;persist();}
